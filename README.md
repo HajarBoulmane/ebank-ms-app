@@ -1,68 +1,69 @@
-# EBank Microservices
+# eBank : Microservices & Agent IA
 
-Application de gestion de comptes bancaires basée sur une architecture microservices (Spring Boot, Spring Cloud).
+![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-Spring_Cloud-6DB33F?logo=springboot&logoColor=white)
+![Spring AI](https://img.shields.io/badge/Spring_AI-MCP-6DB33F?logo=spring&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-21-DD0031?logo=angular&logoColor=white)
+
+Gestion de clients et de comptes bancaires en **architecture microservices**, avec un **agent IA** qui interroge les services via le **Model Context Protocol (MCP)** et une interface **Angular** avec réponses en streaming.
 
 ## Architecture
 
-| Service | Port | Rôle |
-|---|---|---|
-| discovery-service | 8761 | Registre Eureka |
-| customer-service | 8056 | Gestion des clients |
-| ebank-service | 8057 | Gestion des comptes bancaires |
-| gateway-service | 9999 | Point d'entrée unique, routage dynamique |
-
-- Communication synchrone ebank-service vers customer-service via OpenFeign
-- Tolérance aux pannes avec Resilience4j (Circuit Breaker et fallback)
-- Documentation de l'API avec Swagger UI
-
-## Prérequis
-
-- Java 21
-- Maven 3.9+
-- Spring Boot 3.5.10
-
-## Démarrage
-
-Lancer les services dans cet ordre :
-
-1. discovery-service
-2. customer-service
-3. ebank-service
-4. gateway-service
-
-Vérifier l'enregistrement des services sur `http://localhost:8761`.
-
-## Endpoints
-
-Via la gateway (port 9999) :
-
-- `GET /CUSTOMER-SERVICE/customers`
-- `GET /CUSTOMER-SERVICE/customers/{id}`
-- `POST /CUSTOMER-SERVICE/customers`
-- `GET /EBANK-SERVICE/accounts`
-- `GET /EBANK-SERVICE/accounts/{id}`
-- `POST /EBANK-SERVICE/accounts`
-
-Swagger UI (accès direct) :
-
-- `http://localhost:8056/swagger-ui.html`
-- `http://localhost:8057/swagger-ui.html`
-
-## Test de la tolérance aux pannes
-
-1. Démarrer tous les services.
-2. Appeler `GET /EBANK-SERVICE/accounts/{id}` : le compte contient les informations du client.
-3. Arrêter customer-service et rappeler : le compte est retourné avec un client par défaut ("Not available").
-
-## Configuration
-
-Aucune clé n'est stockée dans le code. Pour les parties utilisant l'API OpenAI, définir la variable d'environnement :
-
 ```
-OPENAI_API_KEY=<votre clé>
+Angular :4200 ──▶ gateway-service :9999 ──▶ customer-service :8056 ◀── OpenFeign ── ebank-service :8057
+                          │                        (MCP server)                        (MCP server)
+                          └──▶ ebank-bot :8058 ◀──────────── MCP client ────────────────────┘
+                               (Spring AI + LLM, Telegram, Discord)
+
+discovery-service (Eureka) :8761 : registre de tous les services
 ```
 
-## Parties du projet
+| Service | Rôle |
+|---|---|
+| `discovery-service` | Registre Eureka |
+| `gateway-service` | Point d'entrée unique, routage dynamique, CORS |
+| `customer-service` | Gestion des clients, serveur MCP |
+| `ebank-service` | Gestion des comptes, serveur MCP, appelle `customer-service` via OpenFeign |
+| `ebank-bot` | Agent IA (Spring AI), client MCP, connecteurs Telegram et Discord |
+| `angular-front` | Interface web : comptes et chat avec l'agent |
 
-- Partie 1 : customer-service, ebank-service, OpenFeign, Resilience4j, gateway, discovery-service
-- Partie 2 : chatbot Spring AI, exposition des services via MCP
+## Points techniques
+
+- **Résilience** : Circuit Breaker et fallback (Resilience4j). Si `customer-service` tombe, le compte est retourné avec un client par défaut.
+- **Agent IA** : les services exposent leurs fonctionnalités comme *tools* MCP, découverts automatiquement par le bot au démarrage. Mémoire de conversation incluse.
+- **Streaming** : réponses du LLM transmises en continu (`Flux` côté Spring, affichage progressif côté Angular).
+- **Frontend** : Angular 21, Signals, intercepteur HTTP pour l'indicateur de chargement, rendu Markdown des réponses.
+- **API** : documentation Swagger UI sur chaque service.
+
+## Stack
+
+**Backend** Java 21, Spring Boot, Spring Cloud (Eureka, Gateway, OpenFeign), Resilience4j
+**IA** Spring AI, OpenAI, MCP
+**Frontend** Angular 21, TypeScript, RxJS, Bootstrap 5
+
+## Lancer le projet
+
+Prérequis : Java 21, Maven 3.9+, Node.js, Angular CLI.
+
+1. Démarrer dans l'ordre : `discovery-service`, `customer-service`, `ebank-service`, `gateway-service`, `ebank-bot`
+2. Frontend :
+```bash
+   cd angular-front && npm install && ng serve
+```
+3. Ouvrir http://localhost:4200 (Eureka : http://localhost:8761)
+
+**Configuration** : aucun secret dans le code. Définir `OPENAI_API_KEY` (et les tokens Telegram et Discord pour les connecteurs) en variables d'environnement.
+
+## Endpoints (via la gateway, port 9999)
+
+| Méthode | Endpoint |
+|---|---|
+| GET, POST | `/CUSTOMER-SERVICE/customers` |
+| GET, POST | `/EBANK-SERVICE/account` |
+| GET | `/EBANK-BOT/chat?query=...` |
+| GET | `/EBANK-BOT/chatStream?query=...` (streaming) |
+
+## Auteur
+
+**Hajar Boulmane** : Génie Logiciel et Systèmes Distribués, ENSET Mohammedia
+[GitHub](https://github.com/HajarBoulmane)
