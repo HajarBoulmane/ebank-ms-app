@@ -2,6 +2,8 @@ package org.example.customerservice.services;
 
 import org.example.customerservice.entities.Customer;
 import org.example.customerservice.repositories.CustomerRepository;
+import org.springframework.ai.mcp.annotation.McpTool;
+import org.springframework.ai.mcp.annotation.McpToolParam;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +16,21 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
+    @McpTool(description="Get All customers")
     public List<Customer> getAllCustomers() {
+
         return customerRepository.findAll();
     }
 
-    public Customer findCustomerById(Long id) {
+    @McpTool(description = "Find a customer by id")
+    public Customer findCustomerById(@McpToolParam(description="The customer id") Long id) {
         return customerRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Customer not founf"));
+                .orElseThrow(() -> new RuntimeException("Customer not founf"));
 
     }
 
-    public Customer saveCustomer(Customer customer){
+    @McpTool(description = "Save a new customer")
+    public Customer saveCustomer(@McpToolParam(description = "The customer to save (name,email)")Customer customer) {
         return customerRepository.save(customer);
     }
 

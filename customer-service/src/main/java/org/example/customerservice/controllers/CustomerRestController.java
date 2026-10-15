@@ -2,7 +2,6 @@ package org.example.customerservice.controllers;
 
 import org.example.customerservice.entities.Customer;
 import org.example.customerservice.services.CustomerService;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
