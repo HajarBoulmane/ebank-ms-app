@@ -8,7 +8,13 @@ spring:
       enabled: true
     gateway:
       server:
-        webflux:        # sur Spring Cloud 2025.0 ; sur les anciennes versions : spring.cloud.gateway.routes
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedMethods: "*"
+                allowedHeaders: "*"
           routes:
             - id: r1
               uri: http://localhost:8056

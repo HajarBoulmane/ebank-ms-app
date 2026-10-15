@@ -8,6 +8,7 @@ import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactor.core.publisher.Flux;
 
 import static org.bouncycastle.asn1.x500.style.RFC4519Style.l;
 
@@ -33,6 +34,10 @@ public class EbankAiAgent {
     public String chat(Prompt prompt) {
 
         return chatClient.prompt(prompt).call().content();
+    }
+
+    public Flux<String> chatStream(Prompt prompt) {
+        return chatClient.prompt(prompt).stream().content();
     }
 
 
