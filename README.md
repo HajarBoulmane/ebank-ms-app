@@ -7,6 +7,27 @@
 
 Gestion de clients et de comptes bancaires en **architecture microservices**, avec un **agent IA** qui interroge les services via le **Model Context Protocol (MCP)** et une interface **Angular** avec réponses en streaming.
 
+## Aperçu
+
+## Aperçu
+
+<table>
+  <tr>
+    <td width="50%"><b>Comptes bancaires</b><br><img src="image/accounts.png" alt="Page des comptes"></td>
+    <td width="50%"><b>Interface du bot (Angular)</b><br><img src="image/bot-interface.png" alt="Interface du chat dans Angular"></td>
+  </tr>
+  <tr>
+    <td width="50%"><b>Réponse en streaming</b><br><img src="image/bot.png" alt="Réponse de l'agent"></td>
+    <td width="50%"><b>Registre Eureka</b><br><img src="image/eureka.png" alt="Services enregistrés dans Eureka"></td>
+  </tr>
+</table>
+
+<details>
+<summary>Registre Eureka : tous les services enregistrés</summary>
+<br>
+<img src="docs/images/eureka.png" alt="Eureka" width="800">
+</details>
+
 ## Architecture
 
 ```
@@ -37,9 +58,9 @@ discovery-service (Eureka) :8761 : registre de tous les services
 
 ## Stack
 
-**Backend** Java 21, Spring Boot, Spring Cloud (Eureka, Gateway, OpenFeign), Resilience4j
-**IA** Spring AI, OpenAI, MCP
-**Frontend** Angular 21, TypeScript, RxJS, Bootstrap 5
+- **Backend** : Java 21, Spring Boot, Spring Cloud (Eureka, Gateway, OpenFeign), Resilience4j
+- **IA** : Spring AI, OpenAI, MCP
+- **Frontend** : Angular 21, TypeScript, RxJS, Bootstrap 5
 
 ## Lancer le projet
 
@@ -48,7 +69,9 @@ Prérequis : Java 21, Maven 3.9+, Node.js, Angular CLI.
 1. Démarrer dans l'ordre : `discovery-service`, `customer-service`, `ebank-service`, `gateway-service`, `ebank-bot`
 2. Frontend :
 ```bash
-   cd angular-front && npm install && ng serve
+   cd angular-front/angular-front
+   npm install
+   ng serve
 ```
 3. Ouvrir http://localhost:4200 (Eureka : http://localhost:8761)
 
