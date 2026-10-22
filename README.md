@@ -14,7 +14,7 @@ Gestion de clients et de comptes bancaires en **architecture microservices**, av
 <table>
   <tr>
     <td width="50%"><b>Comptes bancaires</b><br><img src="images/accounts.png" alt="Page des comptes"></td>
-    <td width="50%"><b>Interface du bot (Angular)</b><br><img src="image/bot-interface.png" alt="Interface du chat dans Angular"></td>
+    <td width="50%"><b>Interface du bot (Angular)</b><br><img src="images/bot-interface.png" alt="Interface du chat dans Angular"></td>
   </tr>
   <tr>
     <td width="50%"><b>Réponse en streaming</b><br><img src="images/bot.png" alt="Réponse de l'agent"></td>
