@@ -1,6 +1,5 @@
 <div class="container py-4">
   <div class="d-flex align-items-center justify-content-between mb-4">
-    <h4 class="mb-0"><i class="bi bi-bank2 text-primary me-2"></i>Bank accounts</h4>
     @if (loadingService.isLoading()) {
       <div class="spinner-border text-primary" role="status"></div>
     }
@@ -13,38 +12,6 @@
       </div>
     } @else {
       <!-- Summary cards -->
-      <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="text-muted small">Total accounts</div>
-              <div class="fs-3 fw-bold">{{ state.accounts?.length }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="text-muted small">Total balance</div>
-              <div class="fs-3 fw-bold text-success">
-                {{ totalBalance(state.accounts) | number: '1.2-2' }} MAD
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="text-muted small">Current / Savings</div>
-              <div class="fs-3 fw-bold">
-                {{ countType(state.accounts, 'CURRENT_ACCOUNT') }}
-                <span class="text-muted">/</span>
-                {{ countType(state.accounts, 'SAVING_ACCOUNT') }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- Table -->
       <div class="card shadow-sm border-0">
